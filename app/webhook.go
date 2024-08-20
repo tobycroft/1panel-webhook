@@ -6,9 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"main.go/tuuz/Input"
 	"main.go/tuuz/RET"
+	"net/url"
 	"os"
 	"os/exec"
-	"path/filepath"
+	"strings"
 )
 
 func WebhookController(c *gin.Context) {
@@ -26,29 +27,16 @@ func WebhookController(c *gin.Context) {
 }
 
 func ExecFile(filename string) (string, error) {
-	// 获取当前程序运行的文件夹路径
-	execPath, err := os.Executable()
-	if err != nil {
-		return "", err
-	}
-
-	// 获取当前程序运行的目录
-	execDir := filepath.Dir(execPath)
-
-	// 构建 exec 文件夹的路径
-	execDirPath := filepath.Join(execDir, "exec")
-
-	// 构建完整的.sh文件路径
-	filePath := filepath.Join(execDirPath, filename)
-	fmt.Println("exec:", filePath)
-
-	// 检查文件是否存在
-	if _, err := os.Stat(filePath + ".sh"); os.IsNotExist(err) {
+	filename = url.QueryEscape(filename)
+	filename = strings.ReplaceAll(filename, ".", "")
+	filename = strings.ReplaceAll(filename, "%", "")
+	filename = strings.ReplaceAll(filename, "&", "")
+	fmt.Println("./exec/" + filename + ".sh")
+	if _, err := os.Stat("./exec/" + filename + ".sh"); os.IsNotExist(err) {
 		return "未找到文件", errors.New("未找到文件")
 	}
-
 	// 文件存在，执行.sh脚本
-	out, err := exec.Command("/bin/bash", filePath).Output()
+	out, err := exec.Command("/bin/bash", "./exec/"+filename+".sh").Output()
 	if err != nil {
 		return "", err
 	}

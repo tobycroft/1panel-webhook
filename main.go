@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/tobycroft/Calc"
 	"main.go/config/app_conf"
@@ -29,7 +30,7 @@ func init() {
 }
 
 func main() {
-
+	fmt.Println(os.Args)
 	Calc.RefreshBaseNum()
 	mainroute := gin.Default()
 	//gin.SetMode(gin.ReleaseMode)
