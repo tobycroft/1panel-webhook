@@ -20,11 +20,11 @@ func init() {
 			os.Mkdir("./log", 0755)
 		}
 	}
-	s, err := os.Stat("./exec/")
+	s, err := os.Stat("./webhook/")
 	if err != nil {
-		os.Mkdir("./exec", 0755)
+		os.Mkdir("./webhook", 0755)
 	} else if s.IsDir() {
-		os.Mkdir("./exec", 0755)
+		os.Mkdir("./webhook", 0755)
 	}
 }
 
